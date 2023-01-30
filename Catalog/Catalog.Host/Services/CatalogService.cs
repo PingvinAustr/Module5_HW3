@@ -38,4 +38,71 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
             };
         });
     }
+
+    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetById(int id)
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var result = await _catalogItemRepository.GetById(id);
+            return new PaginatedItemsResponse<CatalogItemDto>()
+            {
+                Count = result.TotalCount,
+                Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
+                PageIndex = 0,
+                PageSize = 0
+            };
+        });
+    }
+
+    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetByBrand(int brandId)
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var result = await _catalogItemRepository.GetByBrand(brandId);
+            return new PaginatedItemsResponse<CatalogItemDto>()
+            {
+                Count = result.TotalCount,
+                Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
+            };
+        });
+    }
+
+    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetByType(int typeId)
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var result = await _catalogItemRepository.GetByType(typeId);
+            return new PaginatedItemsResponse<CatalogItemDto>()
+            {
+                Count = result.TotalCount,
+                Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList()
+            };
+        });
+    }
+
+    public async Task<PaginatedItemsResponse<CatalogBrandDto>> GetBrands()
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var result = await _catalogItemRepository.GetBrands();
+            return new PaginatedItemsResponse<CatalogBrandDto>()
+            {
+                Count = result.TotalCount,
+                Data = result.Data.Select(s => _mapper.Map<CatalogBrandDto>(s)).ToList(),
+            };
+        });
+    }
+
+    public async Task<PaginatedItemsResponse<CatalogTypeDto>> GetTypes()
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var result = await _catalogItemRepository.GetTypes();
+            return new PaginatedItemsResponse<CatalogTypeDto>()
+            {
+                Count = result.TotalCount,
+                Data = result.Data.Select(s => _mapper.Map<CatalogTypeDto>(s)).ToList(),
+            };
+        });
+    }
 }
