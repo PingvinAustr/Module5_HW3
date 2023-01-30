@@ -2,6 +2,7 @@ using System.Net;
 using Catalog.Host.Models.Requests;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Interfaces;
+using Catalog.Host.Models.Dtos;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,5 +29,19 @@ public class CatalogItemController : ControllerBase
     {
         var result = await _catalogItemService.Add(request.Name, request.Description, request.Price, request.AvailableStock, request.CatalogBrandId, request.CatalogTypeId, request.PictureFileName);
         return Ok(new AddItemResponse<int?>() { Id = result });
+    }
+
+    [HttpDelete]
+    public IActionResult Delete(int itemId)
+    {
+        var result = _catalogItemService.Delete(itemId);
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put(CatalogItemDto item, int itemToUpdate)
+    {
+        var result = await _catalogItemService.Put(item, itemToUpdate);
+        return Ok();
     }
 }
